@@ -1,0 +1,67 @@
+#include <WiFi.h>
+#include <ThingSpeak.h>
+#include "DHTesp.h"
+
+DHTesp dhtSensor;
+TempAndHumidity data;
+
+const int DHT_PIN = 15; // always use 15
+const int TOUCH_PIN = 4; // change to your touch sensor pin
+char ssid[] = "leo";
+char pass[] = "honey046";
+WiFiClient client;
+unsigned long myChannelNumber = 2662428;
+const char *myWriteAPIKey = "P4JXPT92NRRJHIOC";
+
+int statusCode;
+
+void setup() 
+{
+    Serial.begin(115200);
+    WiFi.mode(WIFI_STA);
+    ThingSpeak.begin(client);
+    dhtSensor.setup(DHT_PIN, DHTesp::DHT22);
+    pinMode(TOUCH_PIN, INPUT); // Set the touch pin as input
+}
+
+void loop() 
+{
+    data = dhtSensor.getTempAndHumidity();
+    Serial.println("Humi: " + String(data.humidity, 1));
+    Serial.println("Temp: " + String(data.temperature, 2));
+    Serial.println("-----------");
+
+    if (WiFi.status() != WL_CONNECTED) 
+    {
+        Serial.print("Attempting to connect");
+        while (WiFi.status() != WL_CONNECTED) 
+        {
+            WiFi.begin(ssid, pass); 
+            Serial.print(".");
+            delay(5000);
+        }
+        Serial.println("\nConnected.");
+    }     
+
+    // Read the touch sensor state
+    int touchState = digitalRead(TOUCH_PIN);
+    Serial.print("Touch State: ");
+    Serial.println(touchState); // 1 if touched, 0 if not
+
+    ThingSpeak.setField(1, data.humidity);
+    ThingSpeak.setField(2, data.temperature);
+    ThingSpeak.setField(3, touchState); // Add touch state to ThingSpeak
+    statusCode = ThingSpeak.writeFields(myChannelNumber, myWriteAPIKey);
+
+    if (statusCode == 200) // successful writing code
+    {
+        Serial.println("Channel update successful.");
+    }
+    else 
+    {
+        Serial.println("Problem Writing data. HTTP error code :" + String(statusCode));
+    }
+
+    delay(15000);
+}
+\

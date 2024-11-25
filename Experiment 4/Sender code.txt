@@ -1,0 +1,14 @@
+#include <Wire.h>
+void setup()
+{  
+  Wire.begin();
+  pinMode(2,INPUT);
+}
+void loop()
+{
+  int x=digitalRead(2); 
+  Wire.beginTransmission(4); // transmit to device #4 
+  Wire.write(x);
+  Wire.endTransmission();    // stop transmitting   
+  delay(500);
+}

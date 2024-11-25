@@ -1,0 +1,19 @@
+void setup() 
+{
+  pinMode(1, INPUT);   // Sensor input
+  pinMode(3, OUTPUT);  // Buzzer 2
+}
+
+void loop() 
+{
+  int s = digitalRead(1);
+
+  if (s == 1) {
+    tone(3, 1000); // Buzzer 1 plays at 1000 Hz
+    delay(100);
+    noTone(3);    // Buzzer 2 is off
+    delay(100);
+  } else {    // Buzzer 1 is off
+    tone(3, 500);  // Buzzer 2 plays at 500 Hz
+  }
+}

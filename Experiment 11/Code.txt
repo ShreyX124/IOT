@@ -1,0 +1,16 @@
+
+from machine import Pin, PWM, ADC
+
+# creating PWM and ADC objects
+pwm = PWM(Pin(15))
+adc = ADC(Pin(28))
+
+# setting frequency of PWM output
+pwm.freq(255)
+
+# continuously control the brightness of thDe LED using the potentiometer
+while True:
+    # reading analog values from the potentiometer
+    duty = adc.read_u16()
+    # writing analog values to the LED
+    pwm.duty_u16(duty)

@@ -1,0 +1,48 @@
+#include <SoftwareSerial.h>
+ 
+// GPIO where relay is connected to
+const int ledPin =  5;
+ 
+// Handle received messages
+String message = "";
+ 
+// Create software serial object to communicate with HC-05
+SoftwareSerial mySerial(3, 2); //HC-05 Tx & Rx is connected to Arduino #3 & #2
+ 
+void setup() {
+  // Begin serial communication with Arduino and Arduino IDE (Serial Monitor)
+  Serial.begin(9600); 
+  pinMode(ledPin, OUTPUT);
+  mySerial.begin(9600);
+  Serial.println("Initializing...");
+  Serial.println("The device started, now you can pair it with bluetooth!");
+}
+ 
+void loop() {
+  if (mySerial.available()){
+    char incomingChar = mySerial.read();
+    if (incomingChar != '\n'){
+      message += String(incomingChar);
+    }
+    else{
+      message = "";
+    }
+    Serial.write(incomingChar);  
+  }
+  // Check received message and control output accordingly
+  if (message == "red"){
+    digitalWrite(4, HIGH);
+  }
+  else if (message == "blue"){
+    digitalWrite(5, HIGH);
+  }
+  else if (message == "greeb"){
+    digitalWrite(6, HIGH);
+  }
+  else if (message == "off"){
+    digitalWrite(4, LOW);
+    digitalWrite(5, LOW);
+    digitalWrite(6, LOW);
+  }
+  delay(20);
+}

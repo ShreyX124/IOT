@@ -1,0 +1,46 @@
+// Define all the input pins of the motor driver
+const int motor1input1 = 5; // Input 1
+const int motor1input2 = 6; // Input 2
+const int motorEnable = 9;   // Enable pin (PWM pin)
+
+void setup() {
+    Serial.begin(9600);         // Initialize serial communication
+    pinMode(motor1input1, OUTPUT);
+    pinMode(motor1input2, OUTPUT);
+    pinMode(motorEnable, OUTPUT);
+
+    // Initially turn off the motor
+    digitalWrite(motor1input1, HIGH);
+    digitalWrite(motor1input2, HIGH);
+    digitalWrite(motorEnable, LOW); // Disable the motor
+}
+
+void loop() {
+    // Rotate in one direction at varying speeds
+    for (int speed = 0; speed <= 255; speed += 15) { // Increase speed
+        analogWrite(motorEnable, speed);   // Set motor speed
+        digitalWrite(motor1input1, LOW);   // Set direction
+        digitalWrite(motor1input2, HIGH);
+        delay(1000);                        // Run for 1 second
+    }
+
+    // Stop the motor
+    digitalWrite(motor1input1, HIGH);
+    digitalWrite(motor1input2, HIGH);
+    digitalWrite(motorEnable, LOW); // Disable the motor
+    delay(1000); // Stop for 1 second
+
+    // Rotate in the opposite direction at varying speeds
+    for (int speed = 0; speed <= 255; speed += 15) { // Increase speed
+        analogWrite(motorEnable, speed);   // Set motor speed
+        digitalWrite(motor1input1, HIGH);  // Set opposite direction
+        digitalWrite(motor1input2, LOW);
+        delay(1000);                        // Run for 1 second
+    }
+
+    // Stop the motor
+    digitalWrite(motor1input1, HIGH);
+    digitalWrite(motor1input2, HIGH);
+    digitalWrite(motorEnable, LOW); // Disable the motor
+    delay(1000); // Stop for 1 second
+}

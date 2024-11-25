@@ -1,0 +1,83 @@
+int buzzer = 2; // Pin connected to the buzzer
+
+// Define note frequencies for "Happy Birthday"
+#define NOTE_C4  262
+#define NOTE_D4  294
+#define NOTE_E4  330
+#define NOTE_F4  349
+#define NOTE_G4  392
+#define NOTE_A4  440
+#define NOTE_B4  494
+#define NOTE_C5  523
+#define NOTE_D5  587
+#define NOTE_E5  659
+#define NOTE_F5  698
+#define NOTE_G5  784
+
+void setup() {
+  // Set the buzzer pin as an output
+  pinMode(buzzer, OUTPUT);
+}
+
+void loop() {
+  // Play "Happy Birthday" melody
+  playTone(buzzer, NOTE_G4, 500);
+  delay(50);
+  playTone(buzzer, NOTE_G4, 500);
+  delay(50);
+  playTone(buzzer, NOTE_A4, 1000);
+  delay(50);
+  playTone(buzzer, NOTE_G4, 1000);
+  delay(50);
+  playTone(buzzer, NOTE_C5, 1000);
+  delay(50);
+  playTone(buzzer, NOTE_B4, 2000);
+  delay(200);
+
+  playTone(buzzer, NOTE_G4, 500);
+  delay(50);
+  playTone(buzzer, NOTE_G4, 500);
+  delay(50);
+  playTone(buzzer, NOTE_A4, 1000);
+  delay(50);
+  playTone(buzzer, NOTE_G4, 1000);
+  delay(50);
+  playTone(buzzer, NOTE_D5, 1000);
+  delay(50);
+  playTone(buzzer, NOTE_C5, 2000);
+  delay(200);
+
+  playTone(buzzer, NOTE_G4, 500);
+  delay(50);
+  playTone(buzzer, NOTE_G4, 500);
+  delay(50);
+  playTone(buzzer, NOTE_G5, 1000);
+  delay(50);
+  playTone(buzzer, NOTE_E5, 1000);
+  delay(50);
+  playTone(buzzer, NOTE_C5, 1000);
+  delay(50);
+  playTone(buzzer, NOTE_B4, 1000);
+  delay(50);
+  playTone(buzzer, NOTE_A4, 2000);
+  delay(200);
+
+  playTone(buzzer, NOTE_F5, 500);
+  delay(50);
+  playTone(buzzer, NOTE_F5, 500);
+  delay(50);
+  playTone(buzzer, NOTE_E5, 1000);
+  delay(50);
+  playTone(buzzer, NOTE_C5, 1000);
+  delay(50);
+  playTone(buzzer, NOTE_D5, 1000);
+  delay(50);
+  playTone(buzzer, NOTE_C5, 2000);
+  
+  delay(4000); // Pause between repetitions
+}
+
+void playTone(int pin, int frequency, int duration) {
+  tone(pin, frequency, duration);
+  delay(duration); // Wait for the note to finish
+}

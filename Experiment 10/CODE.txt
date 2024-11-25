@@ -1,0 +1,80 @@
+#include <SoftwareSerial.h>
+
+// GPIO where LED and buzzer are connected
+const int ledPin =  7;
+const int buzzerPin = 8;
+const int motor1input1 = 5; // Input 1
+const int motor1input2 = 6; // Input 2
+const int motorEnable = 9;   // Enable pin (PWM pin)
+
+// Create software serial object to communicate with HC-05
+SoftwareSerial mySerial(3, 2); // HC-05 Tx & Rx is connected to Arduino #3 & #2
+
+void setup() {
+  // Begin serial communication
+  Serial.begin(9600); 
+  pinMode(ledPin, OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
+  mySerial.begin(9600);
+  Serial.println("Bluetooth Controller Initialized.");
+  Serial.println("Send 'hello' to turn ON and 'bye' to turn OFF.");
+
+    pinMode(motor1input1, OUTPUT);
+    pinMode(motor1input2, OUTPUT);
+    pinMode(motorEnable, OUTPUT);
+
+    // Initially turn off the motor
+    digitalWrite(motor1input1, HIGH);
+    digitalWrite(motor1input2, HIGH);
+    digitalWrite(motorEnable, LOW); // Disable the motor
+}
+
+void loop() {
+  // Check if data is available to read
+  while (mySerial.available()) {
+    String message = "";
+    char incomingChar;
+
+    // Read until a newline is received
+    while (mySerial.available() && (incomingChar = mySerial.read()) != '\n') {
+      message += incomingChar;
+    }
+
+    // Print the received message for debugging
+    Serial.print("Received: ");
+    Serial.println(message);
+
+    // Control LED and buzzer based on the received message
+    if (message == "bye") {
+      digitalWrite(ledPin, LOW);
+      digitalWrite(buzzerPin, LOW);
+      Serial.println("Turning OFF LED and Buzzer.");
+    } else if (message == "hello") {
+      digitalWrite(ledPin, HIGH);
+      digitalWrite(buzzerPin, HIGH);
+      Serial.println("Turning ON LED and Buzzer.");
+    }
+    if(message=="on")
+    {
+      for (int speed = 0; speed <= 255; speed += 15) 
+      { // Increase speed
+        analogWrite(motorEnable, speed);   // Set motor speed
+        digitalWrite(motor1input1, LOW);   // Set direction
+        digitalWrite(motor1input2, HIGH);
+        delay(1000);        
+      }// Run for 1 second
+	digitalWrite(motor1input1, HIGH);
+        digitalWrite(motor1input2, HIGH);
+        digitalWrite(motorEnable, LOW); // Disable the motor
+        delay(1000); // Stop for 1 second
+    }
+    if(message=="off")
+    {
+      digitalWrite(motor1input1, HIGH);
+    digitalWrite(motor1input2, HIGH);
+    digitalWrite(motorEnable, LOW); // Disable the motor
+    delay(1000); // Stop for 1 second
+    }
+  }
+  delay(100); // Small delay for stability
+}
